@@ -31,6 +31,10 @@ func (c *FakeBatchV1alpha1) Jobs(namespace string) v1alpha1.JobInterface {
 	return &FakeJobs{c, namespace}
 }
 
+func (c *FakeBatchV1alpha1) JobSets(namespace string) v1alpha1.JobSetInterface {
+	return &FakeJobSets{c, namespace}
+}
+
 // RESTClient returns a RESTClient that is used to communicate
 // with API server by this client implementation.
 func (c *FakeBatchV1alpha1) RESTClient() rest.Interface {

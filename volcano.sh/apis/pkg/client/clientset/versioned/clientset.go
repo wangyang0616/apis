@@ -40,8 +40,7 @@ type Interface interface {
 	SchedulingV1beta1() schedulingv1beta1.SchedulingV1beta1Interface
 }
 
-// Clientset contains the clients for groups. Each group has exactly one
-// version included in a Clientset.
+// Clientset contains the clients for groups.
 type Clientset struct {
 	*discovery.DiscoveryClient
 	batchV1alpha1     *batchv1alpha1.BatchV1alpha1Client
