@@ -26,6 +26,7 @@ import (
 	batchv1alpha1 "volcano.sh/apis/pkg/apis/batch/v1alpha1"
 	busv1alpha1 "volcano.sh/apis/pkg/apis/bus/v1alpha1"
 	flowv1alpha1 "volcano.sh/apis/pkg/apis/flow/v1alpha1"
+	jobsetv1alpha1 "volcano.sh/apis/pkg/apis/jobset/v1alpha1"
 	nodeinfov1alpha1 "volcano.sh/apis/pkg/apis/nodeinfo/v1alpha1"
 	schedulingv1beta1 "volcano.sh/apis/pkg/apis/scheduling/v1beta1"
 )
@@ -37,6 +38,7 @@ var localSchemeBuilder = runtime.SchemeBuilder{
 	batchv1alpha1.AddToScheme,
 	busv1alpha1.AddToScheme,
 	flowv1alpha1.AddToScheme,
+	jobsetv1alpha1.AddToScheme,
 	nodeinfov1alpha1.AddToScheme,
 	schedulingv1beta1.AddToScheme,
 }

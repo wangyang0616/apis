@@ -30,6 +30,8 @@ import (
 	fakebusv1alpha1 "volcano.sh/apis/pkg/client/clientset/versioned/typed/bus/v1alpha1/fake"
 	flowv1alpha1 "volcano.sh/apis/pkg/client/clientset/versioned/typed/flow/v1alpha1"
 	fakeflowv1alpha1 "volcano.sh/apis/pkg/client/clientset/versioned/typed/flow/v1alpha1/fake"
+	jobsetv1alpha1 "volcano.sh/apis/pkg/client/clientset/versioned/typed/jobset/v1alpha1"
+	fakejobsetv1alpha1 "volcano.sh/apis/pkg/client/clientset/versioned/typed/jobset/v1alpha1/fake"
 	nodeinfov1alpha1 "volcano.sh/apis/pkg/client/clientset/versioned/typed/nodeinfo/v1alpha1"
 	fakenodeinfov1alpha1 "volcano.sh/apis/pkg/client/clientset/versioned/typed/nodeinfo/v1alpha1/fake"
 	schedulingv1beta1 "volcano.sh/apis/pkg/client/clientset/versioned/typed/scheduling/v1beta1"
@@ -99,6 +101,11 @@ func (c *Clientset) BusV1alpha1() busv1alpha1.BusV1alpha1Interface {
 // FlowV1alpha1 retrieves the FlowV1alpha1Client
 func (c *Clientset) FlowV1alpha1() flowv1alpha1.FlowV1alpha1Interface {
 	return &fakeflowv1alpha1.FakeFlowV1alpha1{Fake: &c.Fake}
+}
+
+// JobsetV1alpha1 retrieves the JobsetV1alpha1Client
+func (c *Clientset) JobsetV1alpha1() jobsetv1alpha1.JobsetV1alpha1Interface {
+	return &fakejobsetv1alpha1.FakeJobsetV1alpha1{Fake: &c.Fake}
 }
 
 // NodeinfoV1alpha1 retrieves the NodeinfoV1alpha1Client

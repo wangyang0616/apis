@@ -25,6 +25,7 @@ import (
 	v1alpha1 "volcano.sh/apis/pkg/apis/batch/v1alpha1"
 	busv1alpha1 "volcano.sh/apis/pkg/apis/bus/v1alpha1"
 	flowv1alpha1 "volcano.sh/apis/pkg/apis/flow/v1alpha1"
+	jobsetv1alpha1 "volcano.sh/apis/pkg/apis/jobset/v1alpha1"
 	nodeinfov1alpha1 "volcano.sh/apis/pkg/apis/nodeinfo/v1alpha1"
 	v1beta1 "volcano.sh/apis/pkg/apis/scheduling/v1beta1"
 )
@@ -68,6 +69,10 @@ func (f *sharedInformerFactory) ForResource(resource schema.GroupVersionResource
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Flow().V1alpha1().JobFlows().Informer()}, nil
 	case flowv1alpha1.SchemeGroupVersion.WithResource("jobtemplates"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Flow().V1alpha1().JobTemplates().Informer()}, nil
+
+		// Group=jobset.volcano.sh, Version=v1alpha1
+	case jobsetv1alpha1.SchemeGroupVersion.WithResource("jobsets"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Jobset().V1alpha1().Jobsets().Informer()}, nil
 
 		// Group=nodeinfo.volcano.sh, Version=v1alpha1
 	case nodeinfov1alpha1.SchemeGroupVersion.WithResource("numatopologies"):
