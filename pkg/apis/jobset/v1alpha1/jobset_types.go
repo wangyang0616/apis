@@ -21,14 +21,8 @@ import (
 	batchv1alpha1 "volcano.sh/apis/pkg/apis/batch/v1alpha1"
 )
 
-// EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
-// NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
-
 // JobsetSpec defines the desired state of Jobset
 type JobsetSpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
-
 	// ReplicatedJobs is a group of volcano jobs managed by jobset.
 	// +listType=map
 	// +listMapKey=name
@@ -59,9 +53,6 @@ type JobsetSpec struct {
 
 // JobsetStatus defines the observed state of Jobset
 type JobsetStatus struct {
-	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
-
 	// Current state of Job.
 	// +optional
 	State JobsetState `json:"state,omitempty" protobuf:"bytes,1,opt,name=state"`
@@ -93,7 +84,10 @@ type JobsetStatus struct {
 	Conditions []JobsetCondition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"status" protobuf:"bytes,13,rep,name=conditions"`
 }
 
+//+genclient
+//+k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 //+kubebuilder:object:root=true
+//+kubebuilder:resource:path=jobset,shortName=js
 //+kubebuilder:subresource:status
 
 // Jobset is the Schema for the jobsets API
@@ -105,6 +99,7 @@ type Jobset struct {
 	Status JobsetStatus `json:"status,omitempty"`
 }
 
+//+k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 //+kubebuilder:object:root=true
 
 // JobsetList contains a list of Jobset

@@ -35,7 +35,7 @@ echo "--------------------"
 
 bash ${SCRIPT_ROOT}/hack/generate-internal-groups.sh "deepcopy,conversion,openapi" \
   volcano.sh/apis/pkg/apis/ volcano.sh/apis/pkg/apis volcano.sh/apis/pkg/apis \
-  "batch:v1alpha1 scheduling:v1beta1"   \
+  "batch:v1alpha1 scheduling:v1beta1 jobset:v1alpha1"   \
   --output-base "$(dirname "${BASH_SOURCE[0]}")/../../.." \
   --go-header-file ${SCRIPT_ROOT}/hack/boilerplate.go.txt
 
