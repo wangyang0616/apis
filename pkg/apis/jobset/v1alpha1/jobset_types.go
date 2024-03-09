@@ -30,6 +30,8 @@ type JobsetSpec struct {
 	// Important: Run "make" to regenerate code after modifying this file
 
 	// ReplicatedJobs is a group of volcano jobs managed by jobset.
+	// +listType=map
+	// +listMapKey=name
 	ReplicatedJobs []ReplicatedJob `json:"replicatedJobs,omitempty"`
 
 	// The minimal available jobs to run for this Jobset.
@@ -70,6 +72,8 @@ type JobsetStatus struct {
 
 	// ReplicatedJobsStatus track the number of JobsReady for each replicatedJob.
 	// +optional
+	// +listType=map
+	// +listMapKey=name
 	ReplicatedJobsStatus []ReplicatedJobStatus `json:"replicatedJobsStatus,omitempty"`
 
 	//Current version of job
@@ -84,6 +88,8 @@ type JobsetStatus struct {
 	// +optional
 	// +patchMergeKey=status
 	// +patchStrategy=merge
+	// +listType=map
+	// +listMapKey=status
 	Conditions []JobsetCondition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"status" protobuf:"bytes,13,rep,name=conditions"`
 }
 
@@ -194,4 +200,3 @@ type JobsetCondition struct {
 func init() {
 	SchemeBuilder.Register(&Jobset{}, &JobsetList{})
 }
-
