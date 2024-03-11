@@ -24,3 +24,11 @@ type JobListerExpansion interface{}
 // JobNamespaceListerExpansion allows custom methods to be added to
 // JobNamespaceLister.
 type JobNamespaceListerExpansion interface{}
+
+// JobSetListerExpansion allows custom methods to be added to
+// JobSetLister.
+type JobSetListerExpansion interface{}
+
+// JobSetNamespaceListerExpansion allows custom methods to be added to
+// JobSetNamespaceLister.
+type JobSetNamespaceListerExpansion interface{}

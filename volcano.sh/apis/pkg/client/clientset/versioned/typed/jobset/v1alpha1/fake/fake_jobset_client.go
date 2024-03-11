@@ -20,15 +20,10 @@ package fake
 import (
 	rest "k8s.io/client-go/rest"
 	testing "k8s.io/client-go/testing"
-	v1alpha1 "volcano.sh/apis/pkg/client/clientset/versioned/typed/jobset/v1alpha1"
 )
 
 type FakeJobsetV1alpha1 struct {
 	*testing.Fake
-}
-
-func (c *FakeJobsetV1alpha1) Jobsets(namespace string) v1alpha1.JobsetInterface {
-	return &FakeJobsets{c, namespace}
 }
 
 // RESTClient returns a RESTClient that is used to communicate

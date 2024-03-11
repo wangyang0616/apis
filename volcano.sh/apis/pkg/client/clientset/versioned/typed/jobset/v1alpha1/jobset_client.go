@@ -27,16 +27,11 @@ import (
 
 type JobsetV1alpha1Interface interface {
 	RESTClient() rest.Interface
-	JobsetsGetter
 }
 
-// JobsetV1alpha1Client is used to interact with features provided by the jobset.volcano.sh group.
+// JobsetV1alpha1Client is used to interact with features provided by the jobset group.
 type JobsetV1alpha1Client struct {
 	restClient rest.Interface
-}
-
-func (c *JobsetV1alpha1Client) Jobsets(namespace string) JobsetInterface {
-	return newJobsets(c, namespace)
 }
 
 // NewForConfig creates a new JobsetV1alpha1Client for the given config.

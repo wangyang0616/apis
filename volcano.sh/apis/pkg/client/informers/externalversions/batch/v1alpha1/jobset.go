@@ -25,65 +25,65 @@ import (
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	watch "k8s.io/apimachinery/pkg/watch"
 	cache "k8s.io/client-go/tools/cache"
-	jobsetv1alpha1 "volcano.sh/apis/pkg/apis/jobset/v1alpha1"
+	batchv1alpha1 "volcano.sh/apis/pkg/apis/batch/v1alpha1"
 	versioned "volcano.sh/apis/pkg/client/clientset/versioned"
 	internalinterfaces "volcano.sh/apis/pkg/client/informers/externalversions/internalinterfaces"
-	v1alpha1 "volcano.sh/apis/pkg/client/listers/jobset/v1alpha1"
+	v1alpha1 "volcano.sh/apis/pkg/client/listers/batch/v1alpha1"
 )
 
-// JobsetInformer provides access to a shared informer and lister for
-// Jobsets.
-type JobsetInformer interface {
+// JobSetInformer provides access to a shared informer and lister for
+// JobSets.
+type JobSetInformer interface {
 	Informer() cache.SharedIndexInformer
-	Lister() v1alpha1.JobsetLister
+	Lister() v1alpha1.JobSetLister
 }
 
-type jobsetInformer struct {
+type jobSetInformer struct {
 	factory          internalinterfaces.SharedInformerFactory
 	tweakListOptions internalinterfaces.TweakListOptionsFunc
 	namespace        string
 }
 
-// NewJobsetInformer constructs a new informer for Jobset type.
+// NewJobSetInformer constructs a new informer for JobSet type.
 // Always prefer using an informer factory to get a shared informer instead of getting an independent
 // one. This reduces memory footprint and number of connections to the server.
-func NewJobsetInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers) cache.SharedIndexInformer {
-	return NewFilteredJobsetInformer(client, namespace, resyncPeriod, indexers, nil)
+func NewJobSetInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers) cache.SharedIndexInformer {
+	return NewFilteredJobSetInformer(client, namespace, resyncPeriod, indexers, nil)
 }
 
-// NewFilteredJobsetInformer constructs a new informer for Jobset type.
+// NewFilteredJobSetInformer constructs a new informer for JobSet type.
 // Always prefer using an informer factory to get a shared informer instead of getting an independent
 // one. This reduces memory footprint and number of connections to the server.
-func NewFilteredJobsetInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers, tweakListOptions internalinterfaces.TweakListOptionsFunc) cache.SharedIndexInformer {
+func NewFilteredJobSetInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers, tweakListOptions internalinterfaces.TweakListOptionsFunc) cache.SharedIndexInformer {
 	return cache.NewSharedIndexInformer(
 		&cache.ListWatch{
 			ListFunc: func(options v1.ListOptions) (runtime.Object, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.JobsetV1alpha1().Jobsets(namespace).List(context.TODO(), options)
+				return client.BatchV1alpha1().JobSets(namespace).List(context.TODO(), options)
 			},
 			WatchFunc: func(options v1.ListOptions) (watch.Interface, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.JobsetV1alpha1().Jobsets(namespace).Watch(context.TODO(), options)
+				return client.BatchV1alpha1().JobSets(namespace).Watch(context.TODO(), options)
 			},
 		},
-		&jobsetv1alpha1.Jobset{},
+		&batchv1alpha1.JobSet{},
 		resyncPeriod,
 		indexers,
 	)
 }
 
-func (f *jobsetInformer) defaultInformer(client versioned.Interface, resyncPeriod time.Duration) cache.SharedIndexInformer {
-	return NewFilteredJobsetInformer(client, f.namespace, resyncPeriod, cache.Indexers{cache.NamespaceIndex: cache.MetaNamespaceIndexFunc}, f.tweakListOptions)
+func (f *jobSetInformer) defaultInformer(client versioned.Interface, resyncPeriod time.Duration) cache.SharedIndexInformer {
+	return NewFilteredJobSetInformer(client, f.namespace, resyncPeriod, cache.Indexers{cache.NamespaceIndex: cache.MetaNamespaceIndexFunc}, f.tweakListOptions)
 }
 
-func (f *jobsetInformer) Informer() cache.SharedIndexInformer {
-	return f.factory.InformerFor(&jobsetv1alpha1.Jobset{}, f.defaultInformer)
+func (f *jobSetInformer) Informer() cache.SharedIndexInformer {
+	return f.factory.InformerFor(&batchv1alpha1.JobSet{}, f.defaultInformer)
 }
 
-func (f *jobsetInformer) Lister() v1alpha1.JobsetLister {
-	return v1alpha1.NewJobsetLister(f.Informer().GetIndexer())
+func (f *jobSetInformer) Lister() v1alpha1.JobSetLister {
+	return v1alpha1.NewJobSetLister(f.Informer().GetIndexer())
 }

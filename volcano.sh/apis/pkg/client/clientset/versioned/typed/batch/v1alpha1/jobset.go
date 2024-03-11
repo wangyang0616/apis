@@ -25,47 +25,47 @@ import (
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
 	rest "k8s.io/client-go/rest"
-	v1alpha1 "volcano.sh/apis/pkg/apis/jobset/v1alpha1"
+	v1alpha1 "volcano.sh/apis/pkg/apis/batch/v1alpha1"
 	scheme "volcano.sh/apis/pkg/client/clientset/versioned/scheme"
 )
 
-// JobsetsGetter has a method to return a JobsetInterface.
+// JobSetsGetter has a method to return a JobSetInterface.
 // A group's client should implement this interface.
-type JobsetsGetter interface {
-	Jobsets(namespace string) JobsetInterface
+type JobSetsGetter interface {
+	JobSets(namespace string) JobSetInterface
 }
 
-// JobsetInterface has methods to work with Jobset resources.
-type JobsetInterface interface {
-	Create(ctx context.Context, jobset *v1alpha1.Jobset, opts v1.CreateOptions) (*v1alpha1.Jobset, error)
-	Update(ctx context.Context, jobset *v1alpha1.Jobset, opts v1.UpdateOptions) (*v1alpha1.Jobset, error)
-	UpdateStatus(ctx context.Context, jobset *v1alpha1.Jobset, opts v1.UpdateOptions) (*v1alpha1.Jobset, error)
+// JobSetInterface has methods to work with JobSet resources.
+type JobSetInterface interface {
+	Create(ctx context.Context, jobSet *v1alpha1.JobSet, opts v1.CreateOptions) (*v1alpha1.JobSet, error)
+	Update(ctx context.Context, jobSet *v1alpha1.JobSet, opts v1.UpdateOptions) (*v1alpha1.JobSet, error)
+	UpdateStatus(ctx context.Context, jobSet *v1alpha1.JobSet, opts v1.UpdateOptions) (*v1alpha1.JobSet, error)
 	Delete(ctx context.Context, name string, opts v1.DeleteOptions) error
 	DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error
-	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.Jobset, error)
-	List(ctx context.Context, opts v1.ListOptions) (*v1alpha1.JobsetList, error)
+	Get(ctx context.Context, name string, opts v1.GetOptions) (*v1alpha1.JobSet, error)
+	List(ctx context.Context, opts v1.ListOptions) (*v1alpha1.JobSetList, error)
 	Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error)
-	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.Jobset, err error)
-	JobsetExpansion
+	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.JobSet, err error)
+	JobSetExpansion
 }
 
-// jobsets implements JobsetInterface
-type jobsets struct {
+// jobSets implements JobSetInterface
+type jobSets struct {
 	client rest.Interface
 	ns     string
 }
 
-// newJobsets returns a Jobsets
-func newJobsets(c *JobsetV1alpha1Client, namespace string) *jobsets {
-	return &jobsets{
+// newJobSets returns a JobSets
+func newJobSets(c *BatchV1alpha1Client, namespace string) *jobSets {
+	return &jobSets{
 		client: c.RESTClient(),
 		ns:     namespace,
 	}
 }
 
-// Get takes name of the jobset, and returns the corresponding jobset object, and an error if there is any.
-func (c *jobsets) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.Jobset, err error) {
-	result = &v1alpha1.Jobset{}
+// Get takes name of the jobSet, and returns the corresponding jobSet object, and an error if there is any.
+func (c *jobSets) Get(ctx context.Context, name string, options v1.GetOptions) (result *v1alpha1.JobSet, err error) {
+	result = &v1alpha1.JobSet{}
 	err = c.client.Get().
 		Namespace(c.ns).
 		Resource("jobsets").
@@ -76,13 +76,13 @@ func (c *jobsets) Get(ctx context.Context, name string, options v1.GetOptions) (
 	return
 }
 
-// List takes label and field selectors, and returns the list of Jobsets that match those selectors.
-func (c *jobsets) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha1.JobsetList, err error) {
+// List takes label and field selectors, and returns the list of JobSets that match those selectors.
+func (c *jobSets) List(ctx context.Context, opts v1.ListOptions) (result *v1alpha1.JobSetList, err error) {
 	var timeout time.Duration
 	if opts.TimeoutSeconds != nil {
 		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
 	}
-	result = &v1alpha1.JobsetList{}
+	result = &v1alpha1.JobSetList{}
 	err = c.client.Get().
 		Namespace(c.ns).
 		Resource("jobsets").
@@ -93,8 +93,8 @@ func (c *jobsets) List(ctx context.Context, opts v1.ListOptions) (result *v1alph
 	return
 }
 
-// Watch returns a watch.Interface that watches the requested jobsets.
-func (c *jobsets) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
+// Watch returns a watch.Interface that watches the requested jobSets.
+func (c *jobSets) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interface, error) {
 	var timeout time.Duration
 	if opts.TimeoutSeconds != nil {
 		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
@@ -108,28 +108,28 @@ func (c *jobsets) Watch(ctx context.Context, opts v1.ListOptions) (watch.Interfa
 		Watch(ctx)
 }
 
-// Create takes the representation of a jobset and creates it.  Returns the server's representation of the jobset, and an error, if there is any.
-func (c *jobsets) Create(ctx context.Context, jobset *v1alpha1.Jobset, opts v1.CreateOptions) (result *v1alpha1.Jobset, err error) {
-	result = &v1alpha1.Jobset{}
+// Create takes the representation of a jobSet and creates it.  Returns the server's representation of the jobSet, and an error, if there is any.
+func (c *jobSets) Create(ctx context.Context, jobSet *v1alpha1.JobSet, opts v1.CreateOptions) (result *v1alpha1.JobSet, err error) {
+	result = &v1alpha1.JobSet{}
 	err = c.client.Post().
 		Namespace(c.ns).
 		Resource("jobsets").
 		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(jobset).
+		Body(jobSet).
 		Do(ctx).
 		Into(result)
 	return
 }
 
-// Update takes the representation of a jobset and updates it. Returns the server's representation of the jobset, and an error, if there is any.
-func (c *jobsets) Update(ctx context.Context, jobset *v1alpha1.Jobset, opts v1.UpdateOptions) (result *v1alpha1.Jobset, err error) {
-	result = &v1alpha1.Jobset{}
+// Update takes the representation of a jobSet and updates it. Returns the server's representation of the jobSet, and an error, if there is any.
+func (c *jobSets) Update(ctx context.Context, jobSet *v1alpha1.JobSet, opts v1.UpdateOptions) (result *v1alpha1.JobSet, err error) {
+	result = &v1alpha1.JobSet{}
 	err = c.client.Put().
 		Namespace(c.ns).
 		Resource("jobsets").
-		Name(jobset.Name).
+		Name(jobSet.Name).
 		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(jobset).
+		Body(jobSet).
 		Do(ctx).
 		Into(result)
 	return
@@ -137,22 +137,22 @@ func (c *jobsets) Update(ctx context.Context, jobset *v1alpha1.Jobset, opts v1.U
 
 // UpdateStatus was generated because the type contains a Status member.
 // Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-func (c *jobsets) UpdateStatus(ctx context.Context, jobset *v1alpha1.Jobset, opts v1.UpdateOptions) (result *v1alpha1.Jobset, err error) {
-	result = &v1alpha1.Jobset{}
+func (c *jobSets) UpdateStatus(ctx context.Context, jobSet *v1alpha1.JobSet, opts v1.UpdateOptions) (result *v1alpha1.JobSet, err error) {
+	result = &v1alpha1.JobSet{}
 	err = c.client.Put().
 		Namespace(c.ns).
 		Resource("jobsets").
-		Name(jobset.Name).
+		Name(jobSet.Name).
 		SubResource("status").
 		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(jobset).
+		Body(jobSet).
 		Do(ctx).
 		Into(result)
 	return
 }
 
-// Delete takes name of the jobset and deletes it. Returns an error if one occurs.
-func (c *jobsets) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
+// Delete takes name of the jobSet and deletes it. Returns an error if one occurs.
+func (c *jobSets) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
 	return c.client.Delete().
 		Namespace(c.ns).
 		Resource("jobsets").
@@ -163,7 +163,7 @@ func (c *jobsets) Delete(ctx context.Context, name string, opts v1.DeleteOptions
 }
 
 // DeleteCollection deletes a collection of objects.
-func (c *jobsets) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
+func (c *jobSets) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, listOpts v1.ListOptions) error {
 	var timeout time.Duration
 	if listOpts.TimeoutSeconds != nil {
 		timeout = time.Duration(*listOpts.TimeoutSeconds) * time.Second
@@ -178,9 +178,9 @@ func (c *jobsets) DeleteCollection(ctx context.Context, opts v1.DeleteOptions, l
 		Error()
 }
 
-// Patch applies the patch and returns the patched jobset.
-func (c *jobsets) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.Jobset, err error) {
-	result = &v1alpha1.Jobset{}
+// Patch applies the patch and returns the patched jobSet.
+func (c *jobSets) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts v1.PatchOptions, subresources ...string) (result *v1alpha1.JobSet, err error) {
+	result = &v1alpha1.JobSet{}
 	err = c.client.Patch(pt).
 		Namespace(c.ns).
 		Resource("jobsets").
