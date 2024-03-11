@@ -83,24 +83,25 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"k8s.io/apimachinery/pkg/runtime.Unknown":                           schema_k8sio_apimachinery_pkg_runtime_Unknown(ref),
 		"k8s.io/apimachinery/pkg/version.Info":                              schema_k8sio_apimachinery_pkg_version_Info(ref),
 		"volcano.sh/apis/pkg/apis/batch/v1alpha1.DependsOn":                 schema_pkg_apis_batch_v1alpha1_DependsOn(ref),
+		"volcano.sh/apis/pkg/apis/batch/v1alpha1.FailurePolicy":             schema_pkg_apis_batch_v1alpha1_FailurePolicy(ref),
 		"volcano.sh/apis/pkg/apis/batch/v1alpha1.Job":                       schema_pkg_apis_batch_v1alpha1_Job(ref),
 		"volcano.sh/apis/pkg/apis/batch/v1alpha1.JobCondition":              schema_pkg_apis_batch_v1alpha1_JobCondition(ref),
 		"volcano.sh/apis/pkg/apis/batch/v1alpha1.JobList":                   schema_pkg_apis_batch_v1alpha1_JobList(ref),
+		"volcano.sh/apis/pkg/apis/batch/v1alpha1.JobSet":                    schema_pkg_apis_batch_v1alpha1_JobSet(ref),
+		"volcano.sh/apis/pkg/apis/batch/v1alpha1.JobSetList":                schema_pkg_apis_batch_v1alpha1_JobSetList(ref),
+		"volcano.sh/apis/pkg/apis/batch/v1alpha1.JobSetSpec":                schema_pkg_apis_batch_v1alpha1_JobSetSpec(ref),
+		"volcano.sh/apis/pkg/apis/batch/v1alpha1.JobSetStatus":              schema_pkg_apis_batch_v1alpha1_JobSetStatus(ref),
 		"volcano.sh/apis/pkg/apis/batch/v1alpha1.JobSpec":                   schema_pkg_apis_batch_v1alpha1_JobSpec(ref),
 		"volcano.sh/apis/pkg/apis/batch/v1alpha1.JobState":                  schema_pkg_apis_batch_v1alpha1_JobState(ref),
 		"volcano.sh/apis/pkg/apis/batch/v1alpha1.JobStatus":                 schema_pkg_apis_batch_v1alpha1_JobStatus(ref),
 		"volcano.sh/apis/pkg/apis/batch/v1alpha1.LifecyclePolicy":           schema_pkg_apis_batch_v1alpha1_LifecyclePolicy(ref),
+		"volcano.sh/apis/pkg/apis/batch/v1alpha1.ReplicatedJob":             schema_pkg_apis_batch_v1alpha1_ReplicatedJob(ref),
+		"volcano.sh/apis/pkg/apis/batch/v1alpha1.ReplicatedJobStatus":       schema_pkg_apis_batch_v1alpha1_ReplicatedJobStatus(ref),
+		"volcano.sh/apis/pkg/apis/batch/v1alpha1.StartupPolicy":             schema_pkg_apis_batch_v1alpha1_StartupPolicy(ref),
+		"volcano.sh/apis/pkg/apis/batch/v1alpha1.SuccessPolicy":             schema_pkg_apis_batch_v1alpha1_SuccessPolicy(ref),
 		"volcano.sh/apis/pkg/apis/batch/v1alpha1.TaskSpec":                  schema_pkg_apis_batch_v1alpha1_TaskSpec(ref),
 		"volcano.sh/apis/pkg/apis/batch/v1alpha1.TaskState":                 schema_pkg_apis_batch_v1alpha1_TaskState(ref),
 		"volcano.sh/apis/pkg/apis/batch/v1alpha1.VolumeSpec":                schema_pkg_apis_batch_v1alpha1_VolumeSpec(ref),
-		"volcano.sh/apis/pkg/apis/jobset/v1alpha1.Jobset":                   schema_pkg_apis_jobset_v1alpha1_Jobset(ref),
-		"volcano.sh/apis/pkg/apis/jobset/v1alpha1.JobsetCondition":          schema_pkg_apis_jobset_v1alpha1_JobsetCondition(ref),
-		"volcano.sh/apis/pkg/apis/jobset/v1alpha1.JobsetList":               schema_pkg_apis_jobset_v1alpha1_JobsetList(ref),
-		"volcano.sh/apis/pkg/apis/jobset/v1alpha1.JobsetSpec":               schema_pkg_apis_jobset_v1alpha1_JobsetSpec(ref),
-		"volcano.sh/apis/pkg/apis/jobset/v1alpha1.JobsetState":              schema_pkg_apis_jobset_v1alpha1_JobsetState(ref),
-		"volcano.sh/apis/pkg/apis/jobset/v1alpha1.JobsetStatus":             schema_pkg_apis_jobset_v1alpha1_JobsetStatus(ref),
-		"volcano.sh/apis/pkg/apis/jobset/v1alpha1.ReplicatedJob":            schema_pkg_apis_jobset_v1alpha1_ReplicatedJob(ref),
-		"volcano.sh/apis/pkg/apis/jobset/v1alpha1.ReplicatedJobStatus":      schema_pkg_apis_jobset_v1alpha1_ReplicatedJobStatus(ref),
 		"volcano.sh/apis/pkg/apis/scheduling/v1beta1.Affinity":              schema_pkg_apis_scheduling_v1beta1_Affinity(ref),
 		"volcano.sh/apis/pkg/apis/scheduling/v1beta1.Cluster":               schema_pkg_apis_scheduling_v1beta1_Cluster(ref),
 		"volcano.sh/apis/pkg/apis/scheduling/v1beta1.Guarantee":             schema_pkg_apis_scheduling_v1beta1_Guarantee(ref),
@@ -2573,6 +2574,25 @@ func schema_pkg_apis_batch_v1alpha1_DependsOn(ref common.ReferenceCallback) comm
 	}
 }
 
+func schema_pkg_apis_batch_v1alpha1_FailurePolicy(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"maxRestarts": {
+						SchemaProps: spec.SchemaProps{
+							Description: "MaxRestarts defines the limit on the number of JobSet restarts. A restart is achieved by recreating all active child jobs.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
 func schema_pkg_apis_batch_v1alpha1_Job(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -2701,6 +2721,250 @@ func schema_pkg_apis_batch_v1alpha1_JobList(ref common.ReferenceCallback) common
 	}
 }
 
+func schema_pkg_apis_batch_v1alpha1_JobSet(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "JobSet is the Schema for the JobSets API",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
+						},
+					},
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("volcano.sh/apis/pkg/apis/batch/v1alpha1.JobSetSpec"),
+						},
+					},
+					"status": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("volcano.sh/apis/pkg/apis/batch/v1alpha1.JobSetStatus"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "volcano.sh/apis/pkg/apis/batch/v1alpha1.JobSetSpec", "volcano.sh/apis/pkg/apis/batch/v1alpha1.JobSetStatus"},
+	}
+}
+
+func schema_pkg_apis_batch_v1alpha1_JobSetList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "JobSetList contains a list of JobSet",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("volcano.sh/apis/pkg/apis/batch/v1alpha1.JobSet"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"items"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "volcano.sh/apis/pkg/apis/batch/v1alpha1.JobSet"},
+	}
+}
+
+func schema_pkg_apis_batch_v1alpha1_JobSetSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "JobSetSpec defines the desired state of JobSet",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"replicatedJobs": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-list-map-keys": []interface{}{
+									"name",
+								},
+								"x-kubernetes-list-type": "map",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "ReplicatedJobs is a group of volcano jobs managed by JobSet.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("volcano.sh/apis/pkg/apis/batch/v1alpha1.ReplicatedJob"),
+									},
+								},
+							},
+						},
+					},
+					"minAvailable": {
+						SchemaProps: spec.SchemaProps{
+							Description: "The minimal available jobs to run for this JobSet. The default is the number of all jobs.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"queue": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Specifies the queue that will be used in the scheduler, \"default\" queue is used this leaves empty.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"priorityClassName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "If specified, indicates the job's priority.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"successPolicy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "SuccessPolicy configures when to declare the JobSet as succeeded. The JobSet is always declared succeeded if all jobs in the set finished with status complete.",
+							Ref:         ref("volcano.sh/apis/pkg/apis/batch/v1alpha1.SuccessPolicy"),
+						},
+					},
+					"failurePolicy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "FailurePolicy, if set, configures when to declare the JobSet as failed. The JobSet is always declared failed if any job in the set finished with status failed.",
+							Ref:         ref("volcano.sh/apis/pkg/apis/batch/v1alpha1.FailurePolicy"),
+						},
+					},
+					"startupPolicy": {
+						SchemaProps: spec.SchemaProps{
+							Description: "StartupPolicy, if set, configures in what order jobs must be started",
+							Ref:         ref("volcano.sh/apis/pkg/apis/batch/v1alpha1.StartupPolicy"),
+						},
+					},
+					"suspend": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Suspend suspends all running child Jobs when set to true.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"volcano.sh/apis/pkg/apis/batch/v1alpha1.FailurePolicy", "volcano.sh/apis/pkg/apis/batch/v1alpha1.ReplicatedJob", "volcano.sh/apis/pkg/apis/batch/v1alpha1.StartupPolicy", "volcano.sh/apis/pkg/apis/batch/v1alpha1.SuccessPolicy"},
+	}
+}
+
+func schema_pkg_apis_batch_v1alpha1_JobSetStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "JobSetStatus defines the observed state of JobSet",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"conditions": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-list-map-keys": []interface{}{
+									"type",
+								},
+								"x-kubernetes-list-type": "map",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.Condition"),
+									},
+								},
+							},
+						},
+					},
+					"restarts": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Restarts tracks the number of times the JobSet has restarted (i.e. recreated in case of RecreateAll policy).",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"replicatedJobsStatus": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-list-map-keys": []interface{}{
+									"name",
+								},
+								"x-kubernetes-list-type": "map",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "ReplicatedJobsStatus track the number of JobsReady for each replicatedJob.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("volcano.sh/apis/pkg/apis/batch/v1alpha1.ReplicatedJobStatus"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Condition", "volcano.sh/apis/pkg/apis/batch/v1alpha1.ReplicatedJobStatus"},
+	}
+}
+
 func schema_pkg_apis_batch_v1alpha1_JobSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -2723,11 +2987,6 @@ func schema_pkg_apis_batch_v1alpha1_JobSpec(ref common.ReferenceCallback) common
 						},
 					},
 					"volumes": {
-						VendorExtensible: spec.VendorExtensible{
-							Extensions: spec.Extensions{
-								"x-kubernetes-list-type": "atomic",
-							},
-						},
 						SchemaProps: spec.SchemaProps{
 							Description: "The volumes mount on Job",
 							Type:        []string{"array"},
@@ -3082,6 +3341,161 @@ func schema_pkg_apis_batch_v1alpha1_LifecyclePolicy(ref common.ReferenceCallback
 	}
 }
 
+func schema_pkg_apis_batch_v1alpha1_ReplicatedJob(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Name is the name of the entry and will be used as a suffix for the Job name.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"template": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Template defines the template of the Job that will be created.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("volcano.sh/apis/pkg/apis/batch/v1alpha1.JobSpec"),
+						},
+					},
+					"replicas": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Replicas is the number of jobs that will be created from this ReplicatedJob's template. Jobs names will be in the format: <JobSet.name>-<spec.replicatedJob.name>-<job-index>",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+				},
+				Required: []string{"name", "template"},
+			},
+		},
+		Dependencies: []string{
+			"volcano.sh/apis/pkg/apis/batch/v1alpha1.JobSpec"},
+	}
+}
+
+func schema_pkg_apis_batch_v1alpha1_ReplicatedJobStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ReplicatedJobStatus defines the observed ReplicatedJobs Readiness.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"ready": {
+						SchemaProps: spec.SchemaProps{
+							Default: 0,
+							Type:    []string{"integer"},
+							Format:  "int32",
+						},
+					},
+					"succeeded": {
+						SchemaProps: spec.SchemaProps{
+							Default: 0,
+							Type:    []string{"integer"},
+							Format:  "int32",
+						},
+					},
+					"failed": {
+						SchemaProps: spec.SchemaProps{
+							Default: 0,
+							Type:    []string{"integer"},
+							Format:  "int32",
+						},
+					},
+					"active": {
+						SchemaProps: spec.SchemaProps{
+							Default: 0,
+							Type:    []string{"integer"},
+							Format:  "int32",
+						},
+					},
+					"suspended": {
+						SchemaProps: spec.SchemaProps{
+							Default: 0,
+							Type:    []string{"integer"},
+							Format:  "int32",
+						},
+					},
+				},
+				Required: []string{"name", "ready", "succeeded", "failed", "active", "suspended"},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_batch_v1alpha1_StartupPolicy(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"startupPolicyOrder": {
+						SchemaProps: spec.SchemaProps{
+							Description: "StartupPolicyOrder determines the startup order of the ReplicatedJobs. AnyOrder means to start replicated jobs in any order. InOrder means to start them as they are listed in the JobSet. A ReplicatedJob is started only when all the jobs of the previous one are ready.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"startupPolicyOrder"},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_batch_v1alpha1_SuccessPolicy(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"operator": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Operator determines either All or Any of the selected jobs should succeed to consider the JobSet successful",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"targetReplicatedJobs": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-list-type": "atomic",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "TargetReplicatedJobs are the names of the replicated jobs the operator will apply to. A null or empty list will apply to all replicatedJobs.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"operator"},
+			},
+		},
+	}
+}
+
 func schema_pkg_apis_batch_v1alpha1_TaskSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -3222,456 +3636,6 @@ func schema_pkg_apis_batch_v1alpha1_VolumeSpec(ref common.ReferenceCallback) com
 		},
 		Dependencies: []string{
 			"k8s.io/api/core/v1.PersistentVolumeClaimSpec"},
-	}
-}
-
-func schema_pkg_apis_jobset_v1alpha1_Jobset(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "Jobset is the Schema for the jobsets API",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"kind": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"apiVersion": {
-						SchemaProps: spec.SchemaProps{
-							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"metadata": {
-						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
-						},
-					},
-					"spec": {
-						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("volcano.sh/apis/pkg/apis/jobset/v1alpha1.JobsetSpec"),
-						},
-					},
-					"status": {
-						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("volcano.sh/apis/pkg/apis/jobset/v1alpha1.JobsetStatus"),
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta", "volcano.sh/apis/pkg/apis/jobset/v1alpha1.JobsetSpec", "volcano.sh/apis/pkg/apis/jobset/v1alpha1.JobsetStatus"},
-	}
-}
-
-func schema_pkg_apis_jobset_v1alpha1_JobsetCondition(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "JobsetCondition contains details for the current condition of this Jobset.",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"status": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Status is the new phase of jobset after performing the state's action.",
-							Default:     "",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"lastTransitionTime": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Last time the condition transitioned from one phase to another.",
-							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
-						},
-					},
-				},
-				Required: []string{"status"},
-			},
-		},
-		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
-	}
-}
-
-func schema_pkg_apis_jobset_v1alpha1_JobsetList(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "JobsetList contains a list of Jobset",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"kind": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"apiVersion": {
-						SchemaProps: spec.SchemaProps{
-							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"metadata": {
-						SchemaProps: spec.SchemaProps{
-							Default: map[string]interface{}{},
-							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
-						},
-					},
-					"items": {
-						SchemaProps: spec.SchemaProps{
-							Type: []string{"array"},
-							Items: &spec.SchemaOrArray{
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: map[string]interface{}{},
-										Ref:     ref("volcano.sh/apis/pkg/apis/jobset/v1alpha1.Jobset"),
-									},
-								},
-							},
-						},
-					},
-				},
-				Required: []string{"items"},
-			},
-		},
-		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta", "volcano.sh/apis/pkg/apis/jobset/v1alpha1.Jobset"},
-	}
-}
-
-func schema_pkg_apis_jobset_v1alpha1_JobsetSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "JobsetSpec defines the desired state of Jobset",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"replicatedJobs": {
-						VendorExtensible: spec.VendorExtensible{
-							Extensions: spec.Extensions{
-								"x-kubernetes-list-map-keys": []interface{}{
-									"name",
-								},
-								"x-kubernetes-list-type": "map",
-							},
-						},
-						SchemaProps: spec.SchemaProps{
-							Description: "ReplicatedJobs is a group of volcano jobs managed by jobset.",
-							Type:        []string{"array"},
-							Items: &spec.SchemaOrArray{
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: map[string]interface{}{},
-										Ref:     ref("volcano.sh/apis/pkg/apis/jobset/v1alpha1.ReplicatedJob"),
-									},
-								},
-							},
-						},
-					},
-					"minAvailable": {
-						SchemaProps: spec.SchemaProps{
-							Description: "The minimal available jobs to run for this Jobset. The default is the number of all jobs.",
-							Type:        []string{"integer"},
-							Format:      "int32",
-						},
-					},
-					"queue": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Specifies the queue that will be used in the scheduler, \"default\" queue is used this leaves empty.",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"maxRetry": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Specifies the maximum number of retries before marking this Jobset failed. Defaults to 3.",
-							Type:        []string{"integer"},
-							Format:      "int32",
-						},
-					},
-					"priorityClassName": {
-						SchemaProps: spec.SchemaProps{
-							Description: "If specified, indicates the job's priority.",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"volcano.sh/apis/pkg/apis/jobset/v1alpha1.ReplicatedJob"},
-	}
-}
-
-func schema_pkg_apis_jobset_v1alpha1_JobsetState(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "JobsetState contains details for the current state of the jobset.",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"phase": {
-						SchemaProps: spec.SchemaProps{
-							Description: "The phase of jobset.",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"reason": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Unique, one-word, CamelCase reason for the phase's last transition.",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"message": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Human-readable message indicating details about last transition.",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"lastTransitionTime": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Last time the condition transit from one phase to another.",
-							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
-	}
-}
-
-func schema_pkg_apis_jobset_v1alpha1_JobsetStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "JobsetStatus defines the observed state of Jobset",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"state": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Current state of Job.",
-							Default:     map[string]interface{}{},
-							Ref:         ref("volcano.sh/apis/pkg/apis/jobset/v1alpha1.JobsetState"),
-						},
-					},
-					"minAvailable": {
-						SchemaProps: spec.SchemaProps{
-							Description: "The minimal available pods to run for this Job",
-							Type:        []string{"integer"},
-							Format:      "int32",
-						},
-					},
-					"replicatedJobsStatus": {
-						VendorExtensible: spec.VendorExtensible{
-							Extensions: spec.Extensions{
-								"x-kubernetes-list-map-keys": []interface{}{
-									"name",
-								},
-								"x-kubernetes-list-type": "map",
-							},
-						},
-						SchemaProps: spec.SchemaProps{
-							Description: "ReplicatedJobsStatus track the number of JobsReady for each replicatedJob.",
-							Type:        []string{"array"},
-							Items: &spec.SchemaOrArray{
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: map[string]interface{}{},
-										Ref:     ref("volcano.sh/apis/pkg/apis/jobset/v1alpha1.ReplicatedJobStatus"),
-									},
-								},
-							},
-						},
-					},
-					"version": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Current version of job",
-							Type:        []string{"integer"},
-							Format:      "int32",
-						},
-					},
-					"retryCount": {
-						SchemaProps: spec.SchemaProps{
-							Description: "The number of Job retries.",
-							Type:        []string{"integer"},
-							Format:      "int32",
-						},
-					},
-					"conditions": {
-						VendorExtensible: spec.VendorExtensible{
-							Extensions: spec.Extensions{
-								"x-kubernetes-list-map-keys": []interface{}{
-									"status",
-								},
-								"x-kubernetes-list-type":       "map",
-								"x-kubernetes-patch-merge-key": "status",
-								"x-kubernetes-patch-strategy":  "merge",
-							},
-						},
-						SchemaProps: spec.SchemaProps{
-							Description: "Which conditions caused the current Jobset state.",
-							Type:        []string{"array"},
-							Items: &spec.SchemaOrArray{
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: map[string]interface{}{},
-										Ref:     ref("volcano.sh/apis/pkg/apis/jobset/v1alpha1.JobsetCondition"),
-									},
-								},
-							},
-						},
-					},
-				},
-			},
-		},
-		Dependencies: []string{
-			"volcano.sh/apis/pkg/apis/jobset/v1alpha1.JobsetCondition", "volcano.sh/apis/pkg/apis/jobset/v1alpha1.JobsetState", "volcano.sh/apis/pkg/apis/jobset/v1alpha1.ReplicatedJobStatus"},
-	}
-}
-
-func schema_pkg_apis_jobset_v1alpha1_ReplicatedJob(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
-				Properties: map[string]spec.Schema{
-					"name": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Name is the name of the entry and will be used as a suffix for the Job name.",
-							Default:     "",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"template": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Template defines the template of the Job that will be created.",
-							Default:     map[string]interface{}{},
-							Ref:         ref("volcano.sh/apis/pkg/apis/batch/v1alpha1.JobSpec"),
-						},
-					},
-					"replicas": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Replicas is the number of jobs that will be created from this ReplicatedJob's template. Jobs names will be in the format: <jobSet.name>-<spec.replicatedJob.name>-<job-index>",
-							Type:        []string{"integer"},
-							Format:      "int32",
-						},
-					},
-				},
-				Required: []string{"name", "template"},
-			},
-		},
-		Dependencies: []string{
-			"volcano.sh/apis/pkg/apis/batch/v1alpha1.JobSpec"},
-	}
-}
-
-func schema_pkg_apis_jobset_v1alpha1_ReplicatedJobStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "ReplicatedJobStatus defines the observed ReplicatedJobs status. Statistics of status information of a type of job.",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"name": {
-						SchemaProps: spec.SchemaProps{
-							Default: "",
-							Type:    []string{"string"},
-							Format:  "",
-						},
-					},
-					"pending": {
-						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
-						},
-					},
-					"aborting": {
-						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
-						},
-					},
-					"aborted": {
-						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
-						},
-					},
-					"running": {
-						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
-						},
-					},
-					"restarting": {
-						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
-						},
-					},
-					"completing": {
-						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
-						},
-					},
-					"completed": {
-						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
-						},
-					},
-					"terminating": {
-						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
-						},
-					},
-					"terminated": {
-						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
-						},
-					},
-					"failed": {
-						SchemaProps: spec.SchemaProps{
-							Default: 0,
-							Type:    []string{"integer"},
-							Format:  "int32",
-						},
-					},
-				},
-				Required: []string{"name", "pending", "aborting", "aborted", "running", "restarting", "completing", "completed", "terminating", "terminated", "failed"},
-			},
-		},
 	}
 }
 

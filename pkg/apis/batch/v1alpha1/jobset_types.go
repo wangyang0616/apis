@@ -18,7 +18,6 @@ package v1alpha1
 
 import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	batchv1alpha1 "volcano.sh/apis/pkg/apis/batch/v1alpha1"
 )
 
 // JobSetSpec defines the desired state of JobSet
@@ -119,7 +118,7 @@ type ReplicatedJob struct {
 	// Name is the name of the entry and will be used as a suffix for the Job name.
 	Name string `json:"name"`
 	// Template defines the template of the Job that will be created.
-	Template batchv1alpha1.JobSpec `json:"template"`
+	Template JobSpec `json:"template"`
 
 	// Replicas is the number of jobs that will be created from this ReplicatedJob's template.
 	// Jobs names will be in the format: <JobSet.name>-<spec.replicatedJob.name>-<job-index>
