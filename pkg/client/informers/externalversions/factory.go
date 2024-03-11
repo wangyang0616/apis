@@ -31,7 +31,6 @@ import (
 	bus "volcano.sh/apis/pkg/client/informers/externalversions/bus"
 	flow "volcano.sh/apis/pkg/client/informers/externalversions/flow"
 	internalinterfaces "volcano.sh/apis/pkg/client/informers/externalversions/internalinterfaces"
-	jobset "volcano.sh/apis/pkg/client/informers/externalversions/jobset"
 	nodeinfo "volcano.sh/apis/pkg/client/informers/externalversions/nodeinfo"
 	scheduling "volcano.sh/apis/pkg/client/informers/externalversions/scheduling"
 )
@@ -260,7 +259,6 @@ type SharedInformerFactory interface {
 	Batch() batch.Interface
 	Bus() bus.Interface
 	Flow() flow.Interface
-	Jobset() jobset.Interface
 	Nodeinfo() nodeinfo.Interface
 	Scheduling() scheduling.Interface
 }
@@ -275,10 +273,6 @@ func (f *sharedInformerFactory) Bus() bus.Interface {
 
 func (f *sharedInformerFactory) Flow() flow.Interface {
 	return flow.New(f, f.namespace, f.tweakListOptions)
-}
-
-func (f *sharedInformerFactory) Jobset() jobset.Interface {
-	return jobset.New(f, f.namespace, f.tweakListOptions)
 }
 
 func (f *sharedInformerFactory) Nodeinfo() nodeinfo.Interface {
