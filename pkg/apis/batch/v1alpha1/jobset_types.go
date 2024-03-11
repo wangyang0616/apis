@@ -92,7 +92,7 @@ type ReplicatedJobStatus struct {
 //+genclient
 //+k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 //+kubebuilder:object:root=true
-//+kubebuilder:resource:path=JobSet,shortName=js
+//+kubebuilder:resource:path=jobsets,shortName=jobset;js
 //+kubebuilder:subresource:status
 
 // JobSet is the Schema for the JobSets API
