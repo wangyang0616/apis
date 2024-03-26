@@ -31,59 +31,59 @@ import (
 	v1alpha1 "volcano.sh/apis/pkg/client/listers/batch/v1alpha1"
 )
 
-// JobSetInformer provides access to a shared informer and lister for
-// JobSets.
-type JobSetInformer interface {
+// HyperJobInformer provides access to a shared informer and lister for
+// HyperJobs.
+type HyperJobInformer interface {
 	Informer() cache.SharedIndexInformer
-	Lister() v1alpha1.JobSetLister
+	Lister() v1alpha1.HyperJobLister
 }
 
-type jobSetInformer struct {
+type hyperJobInformer struct {
 	factory          internalinterfaces.SharedInformerFactory
 	tweakListOptions internalinterfaces.TweakListOptionsFunc
 	namespace        string
 }
 
-// NewJobSetInformer constructs a new informer for JobSet type.
+// NewHyperJobInformer constructs a new informer for HyperJob type.
 // Always prefer using an informer factory to get a shared informer instead of getting an independent
 // one. This reduces memory footprint and number of connections to the server.
-func NewJobSetInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers) cache.SharedIndexInformer {
-	return NewFilteredJobSetInformer(client, namespace, resyncPeriod, indexers, nil)
+func NewHyperJobInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers) cache.SharedIndexInformer {
+	return NewFilteredHyperJobInformer(client, namespace, resyncPeriod, indexers, nil)
 }
 
-// NewFilteredJobSetInformer constructs a new informer for JobSet type.
+// NewFilteredHyperJobInformer constructs a new informer for HyperJob type.
 // Always prefer using an informer factory to get a shared informer instead of getting an independent
 // one. This reduces memory footprint and number of connections to the server.
-func NewFilteredJobSetInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers, tweakListOptions internalinterfaces.TweakListOptionsFunc) cache.SharedIndexInformer {
+func NewFilteredHyperJobInformer(client versioned.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers, tweakListOptions internalinterfaces.TweakListOptionsFunc) cache.SharedIndexInformer {
 	return cache.NewSharedIndexInformer(
 		&cache.ListWatch{
 			ListFunc: func(options v1.ListOptions) (runtime.Object, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.BatchV1alpha1().JobSets(namespace).List(context.TODO(), options)
+				return client.BatchV1alpha1().HyperJobs(namespace).List(context.TODO(), options)
 			},
 			WatchFunc: func(options v1.ListOptions) (watch.Interface, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.BatchV1alpha1().JobSets(namespace).Watch(context.TODO(), options)
+				return client.BatchV1alpha1().HyperJobs(namespace).Watch(context.TODO(), options)
 			},
 		},
-		&batchv1alpha1.JobSet{},
+		&batchv1alpha1.HyperJob{},
 		resyncPeriod,
 		indexers,
 	)
 }
 
-func (f *jobSetInformer) defaultInformer(client versioned.Interface, resyncPeriod time.Duration) cache.SharedIndexInformer {
-	return NewFilteredJobSetInformer(client, f.namespace, resyncPeriod, cache.Indexers{cache.NamespaceIndex: cache.MetaNamespaceIndexFunc}, f.tweakListOptions)
+func (f *hyperJobInformer) defaultInformer(client versioned.Interface, resyncPeriod time.Duration) cache.SharedIndexInformer {
+	return NewFilteredHyperJobInformer(client, f.namespace, resyncPeriod, cache.Indexers{cache.NamespaceIndex: cache.MetaNamespaceIndexFunc}, f.tweakListOptions)
 }
 
-func (f *jobSetInformer) Informer() cache.SharedIndexInformer {
-	return f.factory.InformerFor(&batchv1alpha1.JobSet{}, f.defaultInformer)
+func (f *hyperJobInformer) Informer() cache.SharedIndexInformer {
+	return f.factory.InformerFor(&batchv1alpha1.HyperJob{}, f.defaultInformer)
 }
 
-func (f *jobSetInformer) Lister() v1alpha1.JobSetLister {
-	return v1alpha1.NewJobSetLister(f.Informer().GetIndexer())
+func (f *hyperJobInformer) Lister() v1alpha1.HyperJobLister {
+	return v1alpha1.NewHyperJobLister(f.Informer().GetIndexer())
 }

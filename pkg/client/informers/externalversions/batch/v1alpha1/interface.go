@@ -23,10 +23,10 @@ import (
 
 // Interface provides access to all the informers in this group version.
 type Interface interface {
+	// HyperJobs returns a HyperJobInformer.
+	HyperJobs() HyperJobInformer
 	// Jobs returns a JobInformer.
 	Jobs() JobInformer
-	// JobSets returns a JobSetInformer.
-	JobSets() JobSetInformer
 }
 
 type version struct {
@@ -40,12 +40,12 @@ func New(f internalinterfaces.SharedInformerFactory, namespace string, tweakList
 	return &version{factory: f, namespace: namespace, tweakListOptions: tweakListOptions}
 }
 
+// HyperJobs returns a HyperJobInformer.
+func (v *version) HyperJobs() HyperJobInformer {
+	return &hyperJobInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
+}
+
 // Jobs returns a JobInformer.
 func (v *version) Jobs() JobInformer {
 	return &jobInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
-}
-
-// JobSets returns a JobSetInformer.
-func (v *version) JobSets() JobSetInformer {
-	return &jobSetInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
 }

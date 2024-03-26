@@ -20,14 +20,14 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// JobSetSpec defines the desired state of JobSet
-type JobSetSpec struct {
-	// ReplicatedJobs is a group of volcano jobs managed by JobSet.
+// HyperJobSpec defines the desired state of HyperJob
+type HyperJobSpec struct {
+	// ReplicatedJobs is a group of volcano jobs managed by HyperJob.
 	// +listType=map
 	// +listMapKey=name
 	ReplicatedJobs []ReplicatedJob `json:"replicatedJobs,omitempty"`
 
-	// The minimal available jobs to run for this JobSet.
+	// The minimal available jobs to run for this HyperJob.
 	// The default is the number of all jobs.
 	// +optional
 	MinAvailable int32 `json:"minAvailable,omitempty" protobuf:"bytes,2,opt,name=minAvailable"`
@@ -40,16 +40,16 @@ type JobSetSpec struct {
 	// +optional
 	PriorityClassName string `json:"priorityClassName,omitempty" protobuf:"bytes,11,opt,name=priorityClassName"`
 
-	// SuccessPolicy configures when to declare the JobSet as
+	// SuccessPolicy configures when to declare the HyperJob as
 	// succeeded.
-	// The JobSet is always declared succeeded if all jobs in the set
+	// The HyperJob is always declared succeeded if all jobs in the set
 	// finished with status complete.
 	// +kubebuilder:validation:XValidation:rule="self == oldSelf",message="Value is immutable"
 	SuccessPolicy *SuccessPolicy `json:"successPolicy,omitempty"`
 
-	// FailurePolicy, if set, configures when to declare the JobSet as
+	// FailurePolicy, if set, configures when to declare the HyperJob as
 	// failed.
-	// The JobSet is always declared failed if any job in the set
+	// The HyperJob is always declared failed if any job in the set
 	// finished with status failed.
 	// +kubebuilder:validation:XValidation:rule="self == oldSelf",message="Value is immutable"
 	FailurePolicy *FailurePolicy `json:"failurePolicy,omitempty"`
@@ -62,14 +62,14 @@ type JobSetSpec struct {
 	Suspend *bool `json:"suspend,omitempty"`
 }
 
-// JobSetStatus defines the observed state of JobSet
-type JobSetStatus struct {
+// HyperJobStatus defines the observed state of HyperJob
+type HyperJobStatus struct {
 	// +optional
 	// +listType=map
 	// +listMapKey=type
 	Conditions []metav1.Condition `json:"conditions,omitempty"`
 
-	// Restarts tracks the number of times the JobSet has restarted (i.e. recreated in case of RecreateAll policy).
+	// Restarts tracks the number of times the HyperJob has restarted (i.e. recreated in case of RecreateAll policy).
 	Restarts int32 `json:"restarts,omitempty"`
 
 	// ReplicatedJobsStatus track the number of JobsReady for each replicatedJob.
@@ -92,26 +92,26 @@ type ReplicatedJobStatus struct {
 //+genclient
 //+k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 //+kubebuilder:object:root=true
-//+kubebuilder:resource:path=jobsets,shortName=jobset;js
+//+kubebuilder:resource:path=hyperjobs,shortName=hyperjob;jobset;js
 //+kubebuilder:subresource:status
 
-// JobSet is the Schema for the JobSets API
-type JobSet struct {
+// HyperJob is the Schema for the HyperJobs API
+type HyperJob struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   JobSetSpec   `json:"spec,omitempty"`
-	Status JobSetStatus `json:"status,omitempty"`
+	Spec   HyperJobSpec   `json:"spec,omitempty"`
+	Status HyperJobStatus `json:"status,omitempty"`
 }
 
 //+k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 //+kubebuilder:object:root=true
 
-// JobSetList contains a list of JobSet
-type JobSetList struct {
+// HyperJobList contains a list of HyperJob
+type HyperJobList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []JobSet `json:"items"`
+	Items           []HyperJob `json:"items"`
 }
 
 type ReplicatedJob struct {
@@ -121,23 +121,23 @@ type ReplicatedJob struct {
 	Template JobSpec `json:"template"`
 
 	// Replicas is the number of jobs that will be created from this ReplicatedJob's template.
-	// Jobs names will be in the format: <JobSet.name>-<spec.replicatedJob.name>-<job-index>
+	// Jobs names will be in the format: <HyperJob.name>-<spec.replicatedJob.name>-<job-index>
 	// +kubebuilder:default=1
 	Replicas int32 `json:"replicas,omitempty"`
 }
 
-type JobSetConditionType string
+type HyperJobConditionType string
 
-// These are built-in conditions of a JobSet.
+// These are built-in conditions of a HyperJob.
 const (
-	// JobSetComplete means the job has completed its execution.
-	JobSetCompleted JobSetConditionType = "Completed"
-	// JobSetFailed means the job has failed its execution.
-	JobSetFailed JobSetConditionType = "Failed"
-	// JobSetSuspended means the job is suspended
-	JobSetSuspended JobSetConditionType = "Suspended"
-	// JobSetStartupPolicyCompleted means the StartupPolicy was complete
-	JobSetStartupPolicyCompleted JobSetConditionType = "StartupPolicyCompleted"
+	// HyperJobComplete means the job has completed its execution.
+	HyperJobCompleted HyperJobConditionType = "Completed"
+	// HyperJobFailed means the job has failed its execution.
+	HyperJobFailed HyperJobConditionType = "Failed"
+	// HyperJobSuspended means the job is suspended
+	HyperJobSuspended HyperJobConditionType = "Suspended"
+	// HyperJobStartupPolicyCompleted means the StartupPolicy was complete
+	HyperJobStartupPolicyCompleted HyperJobConditionType = "StartupPolicyCompleted"
 )
 
 // Operator defines the target of a SuccessPolicy or FailurePolicy.
@@ -152,13 +152,13 @@ const (
 )
 
 type FailurePolicy struct {
-	// MaxRestarts defines the limit on the number of JobSet restarts.
+	// MaxRestarts defines the limit on the number of HyperJob restarts.
 	// A restart is achieved by recreating all active child jobs.
 	MaxRestarts int32 `json:"maxRestarts,omitempty"`
 }
 
 type SuccessPolicy struct {
-	// Operator determines either All or Any of the selected jobs should succeed to consider the JobSet successful
+	// Operator determines either All or Any of the selected jobs should succeed to consider the HyperJob successful
 	// +kubebuilder:validation:Enum=All;Any
 	Operator Operator `json:"operator"`
 
@@ -184,7 +184,7 @@ const (
 type StartupPolicy struct {
 	// StartupPolicyOrder determines the startup order of the ReplicatedJobs.
 	// AnyOrder means to start replicated jobs in any order.
-	// InOrder means to start them as they are listed in the JobSet. A ReplicatedJob is started only
+	// InOrder means to start them as they are listed in the HyperJob. A ReplicatedJob is started only
 	// when all the jobs of the previous one are ready.
 	// +kubebuilder:validation:Enum=AnyOrder;InOrder
 	StartupPolicyOrder StartupPolicyOptions `json:"startupPolicyOrder"`
