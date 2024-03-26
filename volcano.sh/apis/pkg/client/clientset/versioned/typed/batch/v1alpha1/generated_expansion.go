@@ -17,6 +17,6 @@ limitations under the License.
 
 package v1alpha1
 
-type JobExpansion interface{}
+type HyperJobExpansion interface{}
 
-type JobSetExpansion interface{}
+type JobExpansion interface{}

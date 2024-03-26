@@ -17,6 +17,14 @@ limitations under the License.
 
 package v1alpha1
 
+// HyperJobListerExpansion allows custom methods to be added to
+// HyperJobLister.
+type HyperJobListerExpansion interface{}
+
+// HyperJobNamespaceListerExpansion allows custom methods to be added to
+// HyperJobNamespaceLister.
+type HyperJobNamespaceListerExpansion interface{}
+
 // JobListerExpansion allows custom methods to be added to
 // JobLister.
 type JobListerExpansion interface{}
@@ -24,11 +32,3 @@ type JobListerExpansion interface{}
 // JobNamespaceListerExpansion allows custom methods to be added to
 // JobNamespaceLister.
 type JobNamespaceListerExpansion interface{}
-
-// JobSetListerExpansion allows custom methods to be added to
-// JobSetLister.
-type JobSetListerExpansion interface{}
-
-// JobSetNamespaceListerExpansion allows custom methods to be added to
-// JobSetNamespaceLister.
-type JobSetNamespaceListerExpansion interface{}
