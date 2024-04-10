@@ -1,5 +1,5 @@
 /*
-Copyright 2024.
+Copyright 2024 The Volcano Authors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -32,14 +32,6 @@ type HyperJobSpec struct {
 	// +optional
 	MinAvailable int32 `json:"minAvailable,omitempty" protobuf:"bytes,2,opt,name=minAvailable"`
 
-	//Specifies the queue that will be used in the scheduler, "default" queue is used this leaves empty.
-	// +optional
-	Queue string `json:"queue,omitempty" protobuf:"bytes,8,opt,name=queue"`
-
-	// If specified, indicates the job's priority.
-	// +optional
-	PriorityClassName string `json:"priorityClassName,omitempty" protobuf:"bytes,11,opt,name=priorityClassName"`
-
 	// SuccessPolicy configures when to declare the HyperJob as
 	// succeeded.
 	// The HyperJob is always declared succeeded if all jobs in the set
@@ -57,9 +49,6 @@ type HyperJobSpec struct {
 	// StartupPolicy, if set, configures in what order jobs must be started
 	// +kubebuilder:validation:XValidation:rule="self == oldSelf",message="Value is immutable"
 	StartupPolicy *StartupPolicy `json:"startupPolicy,omitempty"`
-
-	// Suspend suspends all running child Jobs when set to true.
-	Suspend *bool `json:"suspend,omitempty"`
 }
 
 // HyperJobStatus defines the observed state of HyperJob
@@ -86,7 +75,6 @@ type ReplicatedJobStatus struct {
 	Succeeded int32  `json:"succeeded"`
 	Failed    int32  `json:"failed"`
 	Active    int32  `json:"active"`
-	Suspended int32  `json:"suspended"`
 }
 
 //+genclient
